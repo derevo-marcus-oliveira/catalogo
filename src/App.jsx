@@ -5,40 +5,53 @@ import Modal from './components/Modal';
 import { controller } from './Context/Controller';
 
 function App() {
- 
+
   /*
     crtl - 1 : é os cartoes
     ctrl - 2 : é a funcao de adicionar cartao
     ctrl - 3 : é o cartao selecionado
     ctrl - 4 : é o que seta o cartao selecionado
   */
-  const ctrl = useContext(controller)
+  const context = useContext(controller)
+
+  const cards = context[0];
+  const setCardSelecionado = context[3]
+
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
 
   return (
     <>
       <div className="container ">
-
         <AbaLateral id={"abaLateral"} />
-        <Modal/>
-
-
+        <Modal />
+       
         <div className="row">
-          <div className="col-12 p-4 " style={{ border: "1px solid", display: 'flex', justifyContent: 'end'}}>
-            <button className="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+          <div className="col-12 p-4 " style={{ border: "1px solid", display: 'flex', justifyContent: 'end' }}>
+            <button className="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style={{ margin: "0 8px"}}
+            onClick={() => {
+              
+              setCardSelecionado("");
+              <Modal />
+            }}>+</button>
             <button className="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target={"#abaLateral"} aria-controls={"abaLateral"}>Filter</button>
-            
           </div>
         </div>
         <div className="row g-2">
-          {ctrl[0].map((ctrl, id) => {
+          {cards.map((ctrl, id) => {
 
             console.log("item: " + ctrl);
+            console.log("id: " + id);
 
             return (
               <div key={id} className="col-sm-12 col-md-12 col-lg-6 col-xl-4 col-xxl-3 p-2" onClick={() => {
-                <Modal/>
+
+                setCardSelecionado(ctrl);
+
+                <Modal />
               }}>
-                <Cartao />
+                <Cartao dados={ctrl} />
               </div>
             )
           })}

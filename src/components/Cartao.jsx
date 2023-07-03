@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { controller } from "../Context/Controller"
 
 
-export default function Cartao() {
+export default function Cartao({dados}) {
 
     /*
       crtl - 1 : é os cartoes
@@ -15,15 +15,16 @@ export default function Cartao() {
     return (
         <div className="card" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <div class="card-header">
-                <h5>Nome</h5>
+                <h5>{dados.nome}</h5>
             </div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5OEEx1h1xn72b61WVGUBpCuhWztIuJCjhHg&usqp=CAU" className="card-img-top" alt="..." />
+            <img src={dados.url} className="card-img-top" alt="..." />
             <div className="card-body">
 
-                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p className="card-text"><span style={{fontWeight: 'bold'}}>Raça: </span> {dados.raca}</p>
+                <p className="card-text">{dados.descricao}</p>
             </div>
             <div class="card-footer text-end  text-body-secondary">
-                R$ 25.00
+                {dados.preco}
             </div>
         </div>
     )
