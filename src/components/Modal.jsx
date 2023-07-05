@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react"
 import { controller } from "../Context/Controller"
+import Alerta from "../components/Alerta";
 
 
 
@@ -41,41 +42,78 @@ export default function Modal({ card }) {
 
                             <div className="modal-body">
                                 <div className="row">
-                                    <div className="col-2">
+                                    <div className="col-2" hidden>
                                         <label htmlFor="id" className="form-label">id</label>
                                         <input type="text" className="form-control" id="id" value={cardSelecionado.id} disabled />
                                     </div>
 
-                                    <div className="col-6">
+                                    <div className="col-4">
+                                        <label htmlFor="especie" className="form-label">Espécie</label>
+                                        <select className="form-select form-select-modal" aria-label="especie" id="especie">
+                                            {control.dados[5].map((item) => {
+                                                document.getElementById("especie").value = cardSelecionado.animal
+                                                return (
+
+                                                    <option key={item.id} value={item.id}>{item.animal}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-4">
+                                        <label htmlFor="sexo" className="form-label">Sexo</label>
+                                        <select className="form-select form-select-modal" aria-label="Sexo" id="sexo">
+
+                                            {control.dados[3].map((item) => {
+                                                document.getElementById("sexo").value = cardSelecionado.sexo
+
+                                                return (
+                                                    <option key={item.id} value={item.id}>{item.sexo}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-4">
+                                        <label htmlFor="idade" className="form-label">Idade</label>
+                                        <select className="form-select form-select-modal" aria-label="Idade" id="idade">
+                                            {control.dados[4].map((item) => {
+                                                document.getElementById("idade").value = cardSelecionado.idade
+
+                                                return (
+                                                    <option key={item.id} value={item.id}>{item.idade}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-8">
                                         <label htmlFor="nome" className="form-label">Nome</label>
                                         <input type="text" className="form-control" id="nome" placeholder={cardSelecionado.nome || "Sem nome"} />
                                     </div>
 
                                     <div className="col-4">
                                         <label htmlFor="raca" className="form-label">Raça</label>
-                                        <input type="text" className="form-control" id="raca" placeholder={control.dados[2].filter(r => r.id == cardSelecionado.raca)[0].raca} />
+                                        <select className="form-select form-select-modal" aria-label="Raca" id="raca">
+                                            {control.dados[2].map((item) => {
 
-                                    </div>
+                                                document.getElementById("raca").value = cardSelecionado.raca
 
-                                    <div className="col-4">
-                                        <label htmlFor="sexo" className="form-label">Sexo</label>
-                                        <input type="text" className="form-control" id="sexo" placeholder={control.dados[3].filter(r => r.id == cardSelecionado.sexo)[0].sexo} />
-                                    </div>
-
-                                    <div className="col-4">
-                                        <label htmlFor="idade" className="form-label">Idade</label>
-                                        <input type="text" className="form-control" id="idade" placeholder={control.dados[4].filter(r => r.id == cardSelecionado.idade)[0].idade} />
-                                    </div>
-
-
-                                    <div className="col-4">
-                                        <label htmlFor="animal" className="form-label">Espécie</label>
-                                        <input type="text" className="form-control" id="animal" placeholder={control.dados[5].filter(r => r.id == cardSelecionado.animal)[0].animal} />
+                                                return (
+                                                    <option key={item.id} value={item.id}>{item.raca}</option>
+                                                )
+                                            })}
+                                        </select>
                                     </div>
 
                                     <div className="col-12">
-                                        <label htmlFor="descricao" className="form-label">Descrição</label>
-                                        <textarea className="form-control" id="descricao" rows="3" placeholder={cardSelecionado.observacao || "Sem observação"}></textarea>
+                                        <label htmlFor="observacao" className="form-label">Descrição</label>
+                                        <textarea className="form-control" id="observacao" rows="3" placeholder={cardSelecionado.observacao || "Sem observação"}></textarea>
+                                    </div>
+                                    <div className="col-12" >
+                                        <label htmlFor="preco" className="form-label">Preço</label>
+                                        <input type="text" className="form-control" id="preco" placeholder="Escreva aqui..." />
+
                                     </div>
 
                                     <div className="col-12">
@@ -85,11 +123,30 @@ export default function Modal({ card }) {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-primary" onClick={() => {
+                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
 
+                                    var obj = {
+                                        id: parseInt(document.getElementById("id").value),
+                                        animal: parseInt(document.getElementById("especie").value),
+                                        raca: parseInt(document.getElementById("raca").value),
+                                        idade: parseInt(document.getElementById("idade").value),
+                                        sexo: parseInt(document.getElementById("sexo").value),
+                                        nome: document.getElementById("nome").value || cardSelecionado.nome,
+                                        observacao: document.getElementById("observacao").value || cardSelecionado.observacao,
+                                        preco: parseFloat(document.getElementById("preco").value) || cardSelecionado.preco,
+                                        url: document.getElementById("url").value || cardSelecionado.url
+                                    }
+
+                                    document.querySelectorAll(".form-control").forEach(elemento => {
+                                        elemento.value = "";
+                                    });
+
+                                    control.metodos[4](obj);
                                 }}>Alterar</button>
-                                <button type="button" className="btn btn-danger" onClick={() => {
+                                <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => {
 
+                                    <Alerta />
+                                    control.metodos[3](parseInt(document.getElementById("id").value));
                                 }}>Excluir</button>
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
@@ -110,12 +167,13 @@ export default function Modal({ card }) {
                                         <input type="text" className="form-control" id="id" value={0} disabled />
 
                                     </div>
+
                                     <div className="col-4">
-                                        <label htmlFor="raca" className="form-label">Raça</label>
-                                        <select className="form-select" aria-label="Raca" id="raca">
-                                            {control.dados[2].map((item) => {
+                                        <label htmlFor="especie" className="form-label">Espécie</label>
+                                        <select className="form-select form-select-modal" aria-label="especie" id="especie">
+                                            {control.dados[5].map((item) => {
                                                 return (
-                                                    <option key={item.id} value={item.id}>{item.raca}</option>
+                                                    <option key={item.id} value={item.id}>{item.animal}</option>
                                                 )
                                             })}
                                         </select>
@@ -123,7 +181,7 @@ export default function Modal({ card }) {
 
                                     <div className="col-4">
                                         <label htmlFor="sexo" className="form-label">Sexo</label>
-                                        <select className="form-select" aria-label="Sexo" id="sexo">
+                                        <select className="form-select form-select-modal" aria-label="Sexo" id="sexo">
                                             {control.dados[3].map((item) => {
                                                 return (
                                                     <option key={item.id} value={item.id}>{item.sexo}</option>
@@ -134,21 +192,10 @@ export default function Modal({ card }) {
 
                                     <div className="col-4">
                                         <label htmlFor="idade" className="form-label">Idade</label>
-                                        <select className="form-select" aria-label="Idade" id="idade">
+                                        <select className="form-select form-select-modal" aria-label="Idade" id="idade">
                                             {control.dados[4].map((item) => {
                                                 return (
                                                     <option key={item.id} value={item.id}>{item.idade}</option>
-                                                )
-                                            })}
-                                        </select>
-                                    </div>
-
-                                    <div className="col-4">
-                                        <label htmlFor="especie" className="form-label">Espécie</label>
-                                        <select className="form-select" aria-label="especie" id="especie">
-                                            {control.dados[5].map((item) => {
-                                                return (
-                                                    <option key={item.id} value={item.id}>{item.animal}</option>
                                                 )
                                             })}
                                         </select>
@@ -159,6 +206,17 @@ export default function Modal({ card }) {
                                         <input type="text" className="form-control" id="nome" placeholder="Escreva aqui..." />
 
                                     </div>
+                                    <div className="col-4">
+                                        <label htmlFor="raca" className="form-label">Raça</label>
+                                        <select className="form-select form-select-modal" aria-label="Raca" id="raca">
+                                            {control.dados[2].map((item) => {
+                                                return (
+                                                    <option key={item.id} value={item.id}>{item.raca}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+
                                     <div className="col-12">
                                         <label htmlFor="observacao" className="form-label">Descrição</label>
                                         <textarea className="form-control" id="observacao" rows="3" placeholder="Escreva aqui..." ></textarea>
@@ -179,7 +237,7 @@ export default function Modal({ card }) {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-success" onClick={() => {
-                                    debugger
+
                                     var obj = {
                                         animal: parseInt(document.getElementById("especie").value),
                                         raca: parseInt(document.getElementById("raca").value),
@@ -190,6 +248,15 @@ export default function Modal({ card }) {
                                         preco: parseFloat(document.getElementById("preco").value),
                                         url: document.getElementById("url").value
                                     }
+
+                                    document.querySelectorAll(".form-control").forEach(elemento => {
+                                        elemento.value = "";
+                                    });
+
+                                    document.querySelectorAll(".form-select-modal").forEach(elemento => {
+                                        elemento.value = "0";
+                                    })
+
                                     control.metodos[1](obj);
                                 }}>Salvar</button>
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>

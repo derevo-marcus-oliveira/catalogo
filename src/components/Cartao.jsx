@@ -33,8 +33,6 @@ export default function Cartao({ dados }) {
                 <p className="card-text">
                     <span style={{ fontWeight: 'bold' }}>Sexo: </span> {control.dados[3].filter(s => s.id == dados.sexo)[0].sexo}
                 </p>
-
-                <p className="card-text">{dados.observacao}</p>
             </div>
             <div className="card-footer text-end  text-body-secondary">
                 {dados.preco}
